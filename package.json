@@ -1,30 +1,48 @@
 {
-  "name": "front",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "fronttest",
+  "version": "1.0.0",
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "eslint.config.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "serve": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://BrianGC900@github.com/BrianGC900/FrontTest.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrianGC900/FrontTest/issues"
+  },
+  "homepage": "https://github.com/BrianGC900/FrontTest#readme",
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@ant-design/icons": "^5.6.1",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.8",
+    "@mui/material": "^6.4.8",
+    "@tailwindcss/vite": "^4.0.14",
+    "axios": "^1.8.3",
+    "jwt-decode": "^4.0.0",
+    "react": "^18.0.0",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^7.4.0",
+    "react-syntax-highlighter": "^15.6.1",
+    "react-toastify": "^11.0.5",
+    "tailwindcss": "^4.0.14",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@eslint/js": "^9.21.0",
-    "@types/react": "^19.0.10",
-    "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.21",
-    "eslint": "^9.21.0",
-    "eslint-plugin-react-hooks": "^5.1.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
-    "globals": "^15.15.0",
     "postcss": "^8.5.3",
-    "tailwindcss": "^4.0.14",
-    "vite": "^6.2.0"
-  }
+    "vite": "^6.2.2"
+  },
+  "type": "module"
 }
