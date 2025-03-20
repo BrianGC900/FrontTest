@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Card, Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { toast, ToastContainer } from "react-toastify"; 
-import { login as loginService, setupPassword } from "../services/authServices";
+import { toast, ToastContainer } from "react-toastify";
+import {
+  login as loginService,
+  verifyTwoFactor,
+} from "../services/authServices";
 import { ModalComponent } from "../../../shared/ModalComponent";
 import Form from "../../../shared/Form";
 import LoadingButton from "../../../components/@extended/LoadingButton";
 import { Footer } from "../../../layout/footer";
-import "react-toastify/dist/ReactToastify.css"; 
+import "react-toastify/dist/ReactToastify.css";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   maxWidth: 500,
@@ -27,24 +30,22 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 const LoginPage = () => {
-  const [formData, setFormData] = useState([]);
+  const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [formDataPasswordSetup, setFormDataPasswordSetup] = useState([]);
-  const [loadingPasswordSetup, setLoadingPasswordSetup] = useState(false);
+  const [formData2FA, setFormData2FA] = useState({});
+  const [loading2FA, setLoading2FA] = useState(false);
 
-  // Esquema para el login
   const loginSchema = {
     fields: [
-      { name: "email", label: "Correo Electrónico" },
-      { name: "password", label: "Contraseña" },
+      { name: "email", label: "Correo Electrónico", type: "text" },
+      { name: "password", label: "Contraseña", type: "password" },
     ],
   };
 
-  // Esquema para la configuración de contraseña
-  const passwordSetupSchema = {
-    fields: [{ name: "password", label: "Nueva Contraseña" }],
+  const twoFactorSchema = {
+    fields: [{ name: "code", label: "Código de Verificación" }],
   };
 
   const handleSubmit = async (e) => {
@@ -52,39 +53,43 @@ const LoginPage = () => {
     setLoading(true);
     try {
       const response = await loginService(formData);
-      if (response.requiresInitialTwoFactorSetup) {
-        toast.success(response.message);
+      if (response.requiresTwoFactor) {
+        setOpenModal(true);
+        toast.info(response.message);
       } else {
         toast.success(response.message);
       }
     } catch (err) {
-      setErrors([err.message]);
-      toast.error(err.message);
+      console.error(err);
+      setErrors([err.message || "Error desconocido"]);
+      toast.error(err.message || "Error desconocido");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSubmitPasswordSetup = async (e) => {
+  const handleSubmit2FA = async (e) => {
     e.preventDefault();
-    setLoadingPasswordSetup(true);
+    setLoading2FA(true);
     try {
-      const response = await setupPassword({
-        ...formData,
-        newPassword: formDataPasswordSetup.password,
+      const response = await verifyTwoFactor({
+        email: formData.email,
+        code: formData2FA.code,
       });
-      toast.success("Contraseña configurada correctamente");
+      console.log("2FA RESPONSE", response);
+      toast.success("Verificación completada con éxito.");
       setOpenModal(false);
     } catch (err) {
-      setErrors([err.message]);
-      toast.error(err.message);
+      console.error(err);
+      setErrors([err.message || "Error en la verificación 2FA"]);
+      toast.error(err.message || "Error en la verificación 2FA");
     } finally {
-      setLoadingPasswordSetup(false);
+      setLoading2FA(false);
     }
   };
 
   return (
-    <div>
+    <React.Fragment>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -95,8 +100,8 @@ const LoginPage = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        toastStyle={{ fontSize: "0.8rem" }} 
-      />{" "}
+        toastStyle={{ fontSize: "0.8rem" }}
+      />
       <div
         style={{
           display: "flex",
@@ -111,11 +116,7 @@ const LoginPage = () => {
           <Typography
             variant="h5"
             align="center"
-            sx={{
-              fontWeight: "bold",
-              mb: 3,
-              color: "#4e4e4e",
-            }}
+            sx={{ fontWeight: "bold", mb: 3, color: "#4e4e4e" }}
           >
             Bienvenido!
           </Typography>
@@ -146,7 +147,6 @@ const LoginPage = () => {
               </LoadingButton>
             </div>
           </form>
-
           <Footer
             setActiveTab={() => {}}
             text="¿No tienes una cuenta?"
@@ -154,41 +154,40 @@ const LoginPage = () => {
             sx={{
               marginTop: 2,
               fontSize: "0.8rem",
-              color: "#888", 
-              display: "flex", 
-              justifyContent: "center", 
-              alignItems: "center", 
-              gap: "8px", 
+              color: "#888",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "8px",
             }}
           />
+          <ModalComponent
+            open={openModal}
+            onClose={() => setOpenModal(false)}
+            title="Verificación de 2FA"
+          >
+            <form onSubmit={handleSubmit2FA}>
+              <Form
+                schema={twoFactorSchema}
+                fieldFX={[formData2FA, setFormData2FA]}
+                errorFx={[errors, setErrors]}
+                grid={1}
+              />
+              <LoadingButton
+                type="submit"
+                className="button-mc"
+                loading={loading2FA}
+                disabled={loading2FA}
+                fullWidth
+                sx={{ marginTop: 2 }}
+              >
+                Verificar Código
+              </LoadingButton>
+            </form>
+          </ModalComponent>
         </StyledCard>
       </div>
-      <ModalComponent
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        title="Configuración de contraseña"
-      >
-        <form onSubmit={handleSubmitPasswordSetup}>
-          <Form
-            schema={passwordSetupSchema}
-            fieldFX={[formDataPasswordSetup, setFormDataPasswordSetup]}
-            errorFx={[errors, setErrors]}
-            grid={1}
-            sheetName="Configuración de contraseña"
-          />
-          <LoadingButton
-            type="submit"
-            className="button-mc"
-            loading={loadingPasswordSetup}
-            disabled={loadingPasswordSetup}
-            fullWidth
-            sx={{ marginTop: 2 }}
-          >
-            Configurar Contraseña
-          </LoadingButton>
-        </form>
-      </ModalComponent>
-    </div>
+    </React.Fragment>
   );
 };
 

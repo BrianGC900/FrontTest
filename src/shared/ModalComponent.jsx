@@ -1,24 +1,52 @@
-import React from 'react';
-import { Modal, Box, Typography, Button } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import PropTypes from 'prop-types';
 
-export const ModalComponent = ({ open, onClose, title, children }) => {
+export const ModalComponent = ({ open, onClose, title, children, maxWidth = 'sm', fullWidth = true, actions, showCloseButton = true }) => {
   return (
-    <Modal open={open} onClose={onClose}>
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 400,
-          bgcolor: 'background.paper',
-          boxShadow: 24,
-          p: 4,
-        }}
-      >
-        <Typography variant="h6" component="h2">{title}</Typography>
-        {children}
-      </Box>
-    </Modal>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth={maxWidth}
+      fullWidth={fullWidth}
+      sx={{
+        '& .MuiDialog-paper': {
+          borderRadius: 10
+        }
+      }}
+    >
+      {title && (
+        <DialogTitle>
+          {title}
+          {showCloseButton && (
+            <IconButton
+              aria-label="close"
+              onClick={onClose}
+              sx={{
+                position: 'absolute',
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500]
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          )}
+        </DialogTitle>
+      )}
+      <DialogContent dividers>{children}</DialogContent>
+      {actions && <DialogActions>{actions}</DialogActions>}
+    </Dialog>
   );
+};
+
+ModalComponent.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  maxWidth: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl', false]),
+  fullWidth: PropTypes.bool,
+  actions: PropTypes.node,
+  showCloseButton: PropTypes.bool
 };
