@@ -26,7 +26,7 @@ Antes de comenzar, asegúrate de tener instalados los siguientes componentes en 
 - **React Router DOM**: Para la gestión de rutas en la aplicación.
 - **Axios**: Para manejar las solicitudes HTTP al backend.
 - **Styled Components**: Para manejar los estilos de manera modular y reutilizable.
-- **React Query**: Para la gestión de datos asíncronos (opcional si se usa en tu proyecto).
+- **React Query**: Para la gestión de datos asíncronos
 - **react-icons**: Para usar iconos fácilmente en los componentes.
 
 ## Instalación y Configuración
