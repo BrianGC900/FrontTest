@@ -39,6 +39,8 @@ Clona el repositorio en tu máquina local:
 git clone https://github.com/tuusuario/nombre-del-proyecto.git
 cd nombre-del-proyecto
 npm install
+npm run dev
+```
 
 
 
