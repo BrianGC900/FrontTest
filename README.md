@@ -41,6 +41,9 @@ cd nombre-del-proyecto
 npm install
 npm run dev
 ```
+```env
+VITE_API_URL=http://localhost:3001
+```
 
 
 
