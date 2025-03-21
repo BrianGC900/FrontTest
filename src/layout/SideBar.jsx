@@ -13,7 +13,7 @@ const Sidebar = ({ open, onClose }) => {
     { text: "Usuarios", path: "/users" },
     { text: "Profile", path: "/profile", isComingSoon: true },
     { text: "Settings", path: "/settings", isComingSoon: true },
-    { text: "Logout", path: "/login", isLogout: true },
+    { text: "Cerrar Sesión", path: "/login", isLogout: true },
   ];
 
   const handleNavigate = (item) => {
@@ -21,7 +21,7 @@ const Sidebar = ({ open, onClose }) => {
       setToastMessage("Estamos trabajando en ello...");
       setToastOpen(true);
     } else if (item.isLogout) {
-      localStorage.removeItem("authToken"); // Elimina el token del usuario
+      localStorage.removeItem("authToken"); 
       navigate(item.path);
     } else {
       navigate(item.path);
@@ -44,6 +44,7 @@ const Sidebar = ({ open, onClose }) => {
                   backgroundColor: item.isLogout ? "#d32f2f" : "transparent",
                   "&:hover": { backgroundColor: item.isLogout ? "#b71c1c" : "#f0f0f0" },
                   color: item.isLogout ? "white" : "#333",
+                  cursor: "pointer",
                 }}
               >
                 <ListItemText primary={item.text} />
@@ -53,8 +54,6 @@ const Sidebar = ({ open, onClose }) => {
           <Divider />
         </Box>
       </Drawer>
-
-      {/* Toast para mostrar mensajes */}
       <Snackbar open={toastOpen} autoHideDuration={3000} onClose={() => setToastOpen(false)}>
         <Alert onClose={() => setToastOpen(false)} severity="info" sx={{ width: "100%" }}>
           {toastMessage}

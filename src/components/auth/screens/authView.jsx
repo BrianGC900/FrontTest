@@ -1,6 +1,5 @@
-// views/AuthView.js
 import React from 'react';
-import AuthCard from '../components/authCard'; // Asegúrate de que la ruta sea correcta
+import AuthCard from '../components/authCard'; 
 
 const AuthView = () => {
   return (

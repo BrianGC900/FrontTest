@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Importa useNavigate
 import { Card, Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import {
   login as loginService,
   verifyTwoFactor,
@@ -10,7 +10,7 @@ import {
 import { ModalComponent } from "../../../shared/ModalComponent";
 import Form from "../../../shared/Form";
 import LoadingButton from "../../../components/@extended/LoadingButton";
-import { Footer } from "../../../layout/footer";
+import { FooterLogin } from "../../../layout/FooterLogin";
 import "react-toastify/dist/ReactToastify.css";
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -60,7 +60,7 @@ const LoginPage = () => {
         toast.info(response.message);
       } else {
         localStorage.setItem("authToken", response.token);
-        navigate("/dashboard"); // Redirigir al dashboard
+        navigate("/dashboard");
         toast.success(response.message);
       }
     } catch (err) {
@@ -75,18 +75,25 @@ const LoginPage = () => {
   const handleSubmit2FA = async (e) => {
     e.preventDefault();
     setLoading2FA(true);
-
+  
     try {
       console.log("Datos enviados a verifyTwoFactor:", {
         email: formData.email,
         code: formData2FA.code,
       });
-
+  
       const response = await verifyTwoFactor(formData.email, formData2FA.code);
-
+  
       console.log("2FA RESPONSE", response);
-      toast.success("Verificación completada con éxito.");
-      setOpenModal(false);
+  
+      if (response.token) {
+        localStorage.setItem("authToken", response.token);
+        navigate("/dashboard");
+        toast.success("Verificación completada con éxito.");
+        setOpenModal(false);
+      } else {
+        toast.error("No se recibió token después de la verificación 2FA.");
+      }
     } catch (err) {
       console.error(err);
       setErrors([err.message || "Error en la verificación 2FA"]);
@@ -95,21 +102,10 @@ const LoginPage = () => {
       setLoading2FA(false);
     }
   };
+  
 
   return (
     <React.Fragment>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        toastStyle={{ fontSize: "0.8rem" }}
-      />
       <div
         style={{
           display: "flex",
@@ -155,7 +151,7 @@ const LoginPage = () => {
               </LoadingButton>
             </div>
           </form>
-          <Footer
+          <FooterLogin
             setActiveTab={() => {}}
             text="¿No tienes una cuenta?"
             buttonText="Regístrate"

@@ -1,40 +1,43 @@
-import { api } from '../../../utils/libs/axios';  // Importa la configuración de axios
+import { api } from '../../../utils/libs/axios';
 
-const API_URL = "/api/users"; // Ruta base de los usuarios
+const API_URL = "/api/users";
 
-// Obtener usuarios con los parámetros de búsqueda, rol, estado, página y límite
 export const fetchUsers = async (search, roleFilter, statusFilter, page, rowsPerPage) => {
   try {
-    // Construir los parámetros de consulta
     const params = {
-        search,  // Puedes probar con un valor de prueba aquí
+        search, 
         roleFilter, 
         statusFilter,
         page,
         rowsPerPage
     };
 
-    // Realizar la solicitud GET usando el api configurado
-
     const response = await api.get(API_URL, { params });
-    console.log("DATA",response.data);
-
-    // Retorna los datos de los usuarios
     return response.data; 
   } catch (error) {
     console.error(error);
-    return [];  // En caso de error, devuelve un arreglo vacío
+    return []; 
   }
 };
 
-// Eliminar un usuario por su id
 export const deleteUser = async (id) => {
   try {
-    // Realizar la solicitud DELETE usando el api configurado
     await api.delete(`${API_URL}/${id}`);
-    return true;  // Retorna true si la eliminación fue exitosa
+    return true;
   } catch (error) {
     console.error("Error al eliminar usuario:", error);
-    return false;  // Retorna false si ocurrió un error
+    return false; 
+  }
+};
+
+// Actualizar un usuario por su ID
+export const updateUser = async (userData) => {
+  try {
+    const { _id, ...dataToUpdate } = userData;
+    const response = await api.put(`${API_URL}/${_id}`, dataToUpdate);  
+    return response.data; 
+  } catch (error) {
+    console.error("Error al actualizar usuario:", error);
+    return null;
   }
 };

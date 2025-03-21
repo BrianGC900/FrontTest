@@ -3,12 +3,11 @@ import { TextField, Select, MenuItem } from "@mui/material";
 
 const UserFilters = ({ search, setSearch, roleFilter, setRoleFilter, statusFilter, setStatusFilter }) => {
   useEffect(() => {
-    // Validar y restablecer si los valores no están en las opciones válidas
     if (![ "", "admin", "user" ].includes(roleFilter)) {
-      setRoleFilter(""); // Restablecer a valor vacío si no es válido
+      setRoleFilter(""); 
     }
     if (![ "", "active", "inactive" ].includes(statusFilter)) {
-      setStatusFilter(""); // Restablecer a valor vacío si no es válido
+      setStatusFilter("");
     }
   }, [roleFilter, statusFilter, setRoleFilter, setStatusFilter]);
 

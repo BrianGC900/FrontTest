@@ -2,18 +2,18 @@
 import React from "react";
 import { Button, Box, Typography, Card, CardContent, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import PersonIcon from "@mui/icons-material/Person";  // Icono para la bienvenida
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance"; // Icono para balance
-import AccessTimeIcon from "@mui/icons-material/AccessTime"; // Icono para tiempo
-import ShowChartIcon from "@mui/icons-material/ShowChart"; // Icono para estadísticas
+import PersonIcon from "@mui/icons-material/Person";  
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance"; 
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ShowChartIcon from "@mui/icons-material/ShowChart";
 
 const StyledCard = styled(Card)(({ theme }) => ({
-  maxWidth: 400,  // Tamaño adecuado para el card
-  margin: "auto", // Centrado del card
-  borderRadius: "12px",  // Bordes redondeados
-  boxShadow: theme.shadows[10],  // Sombra sutil
+  maxWidth: 400,
+  margin: "auto",
+  borderRadius: "12px",
+  boxShadow: theme.shadows[10],
   backgroundColor: "#ffffff",
-  overflow: "hidden",  // Asegura que todo el contenido esté dentro del card
+  overflow: "hidden",
 }));
 
 const CardTitle = styled(Typography)(({ theme }) => ({
@@ -24,13 +24,11 @@ const CardTitle = styled(Typography)(({ theme }) => ({
 }));
 
 const DashboardCard = ({ onLogout }) => {
-  // Obtener el nombre del usuario desde localStorage
   const userName = localStorage.getItem("userName") || "Usuario"; 
 
   return (
     <StyledCard>
       <CardContent sx={{ textAlign: "center", padding: 4 }}>
-        {/* Icono de bienvenida con el nombre del usuario */}
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: 3 }}>
           <PersonIcon sx={{ fontSize: "3rem", marginRight: 2, color: "#1976d2" }} />
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>
@@ -43,8 +41,6 @@ const DashboardCard = ({ onLogout }) => {
         <Typography variant="body1" sx={{ marginBottom: 3, fontSize: "1rem", color: "#555" }}>
           ¡Explora las características de tu panel!
         </Typography>
-
-        {/* Estadísticas y datos ficticios */}
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={4}>
             <Box sx={{ textAlign: "center" }}>

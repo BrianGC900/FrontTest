@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import UserFilters from "../components/UserFilters";
 import UserTable from "../components/UserTable";
-import { fetchUsers, deleteUser } from "../services/UserService";
+import { fetchUsers, updateUser } from "../services/UserService";
 import Header from "../../../layout/Header";
 import Sidebar from "../../../layout/SideBar";
+import { toast } from "react-toastify";
 
 const UsersScreen = () => {
   const [users, setUsers] = useState([]);
@@ -31,17 +32,22 @@ const UsersScreen = () => {
     setLoading(false);
   };
 
-  const handleDelete = async (id) => {
-    const success = await deleteUser(id);
-    if (success) loadUsers();
-  };
-
   const toggleSidebar = () => {
     setOpenSidebar(!openSidebar);
   };
 
   const handleBackClick = () => {
     navigate(-1);
+  };
+
+  const handleUserUpdated = async (updatedUser) => {
+    try {
+      await updateUser(updatedUser);  
+      toast.success("Usuario actualizado correctamente");
+      loadUsers();
+    } catch (error) {
+      toast.error("Error al actualizar el usuario");
+    }
   };
 
   return (
@@ -82,7 +88,12 @@ const UsersScreen = () => {
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
         />
-        <UserTable users={users} loading={loading} onDelete={loadUsers} />
+        <UserTable
+          users={users}
+          loading={loading}
+          onDelete={loadUsers}
+          onUpdate={handleUserUpdated}  
+        />
         <TablePagination
           component="div"
           count={100}
