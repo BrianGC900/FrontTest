@@ -28,6 +28,7 @@
     "@mui/material": "^6.4.8",
     "@tailwindcss/vite": "^4.0.14",
     "axios": "^1.8.3",
+    "fronttest": "file:",
     "jwt-decode": "^4.0.0",
     "react": "^18.0.0",
     "react-copy-to-clipboard": "^5.1.0",
@@ -35,6 +36,7 @@
     "react-router-dom": "^7.4.0",
     "react-syntax-highlighter": "^15.6.1",
     "react-toastify": "^11.0.5",
+    "sweetalert2": "^11.17.2",
     "tailwindcss": "^4.0.14",
     "zustand": "^5.0.3"
   },

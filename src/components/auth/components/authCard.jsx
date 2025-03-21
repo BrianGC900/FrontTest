@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Importa useNavigate
 import { Card, Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { toast, ToastContainer } from "react-toastify";
@@ -36,6 +37,7 @@ const LoginPage = () => {
   const [openModal, setOpenModal] = useState(false);
   const [formData2FA, setFormData2FA] = useState({});
   const [loading2FA, setLoading2FA] = useState(false);
+  const navigate = useNavigate();  // Usamos useNavigate aquí
 
   const loginSchema = {
     fields: [
@@ -57,6 +59,8 @@ const LoginPage = () => {
         setOpenModal(true);
         toast.info(response.message);
       } else {
+        localStorage.setItem("authToken", response.token);
+        navigate("/dashboard"); // Redirigir al dashboard
         toast.success(response.message);
       }
     } catch (err) {
@@ -71,11 +75,15 @@ const LoginPage = () => {
   const handleSubmit2FA = async (e) => {
     e.preventDefault();
     setLoading2FA(true);
+
     try {
-      const response = await verifyTwoFactor({
+      console.log("Datos enviados a verifyTwoFactor:", {
         email: formData.email,
         code: formData2FA.code,
       });
+
+      const response = await verifyTwoFactor(formData.email, formData2FA.code);
+
       console.log("2FA RESPONSE", response);
       toast.success("Verificación completada con éxito.");
       setOpenModal(false);
@@ -118,7 +126,7 @@ const LoginPage = () => {
             align="center"
             sx={{ fontWeight: "bold", mb: 3, color: "#4e4e4e" }}
           >
-            Bienvenido!
+            Inicia Sesión
           </Typography>
           <form onSubmit={handleSubmit}>
             <div

@@ -8,11 +8,9 @@ export const loginUser = async (email, password) => {
     const response = await axios.post(`${API_URL}/login`, { email, password });
     
     if (response.data.requiresTwoFactor) {
-      // Si se requiere 2FA, indicar al usuario que ingrese el código
       return { requiresTwoFactor: true, message: response.data.message };
     }
 
-    // Si no requiere 2FA, se realiza el login exitoso
     return { requiresTwoFactor: false, user: response.data.user, token: response.data.token, message: response.data.message };
     
   } catch (error) {

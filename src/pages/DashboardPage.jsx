@@ -1,7 +1,12 @@
-import React, { useEffect } from "react";
+// DashboardPage.js
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box, IconButton } from "@mui/material";
+import { Menu as MenuIcon } from "@mui/icons-material";
+import Header from "../layout/Header"; // Importamos el Header
+import DashboardCard from "../layout/DashboardCard"; // Importamos el DashboardCard
+import Sidebar from "../layout/SideBar"; // Importamos el Sidebar
 
-// Función para verificar si el token JWT ha expirado
 const isTokenExpired = (token) => {
   try {
     const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decodifica el JWT
@@ -14,6 +19,7 @@ const isTokenExpired = (token) => {
 };
 
 const DashboardPage = () => {
+  const [openSidebar, setOpenSidebar] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,17 +30,57 @@ const DashboardPage = () => {
       navigate("/login");
       return;
     }
-
-    // Aquí ya no es necesario verificar la expiración, solo mostrar el Dashboard
   }, [navigate]);
 
+  // Función para manejar el logout
+  const handleLogout = () => {
+    localStorage.removeItem("authToken"); // Elimina el token del localStorage
+    navigate("/login"); // Redirige al login
+  };
+
+  const toggleSidebar = () => {
+    setOpenSidebar(!openSidebar); // Alternar el estado del Sidebar
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-6">Welcome to the Dashboard</h2>
-        <p>Your content goes here!</p>
-      </div>
-    </div>
+    <Box>
+      {/* Botón de menú para abrir el Sidebar */}
+      <IconButton
+        sx={{
+          position: "absolute",
+          top: 16,
+          left: 16,
+          color: "white", // Hace que el icono sea blanco
+          fontSize: "1.2rem", // Aumenta el tamaño del botón en general
+        }}
+        onClick={toggleSidebar}
+      >
+        <MenuIcon sx={{ fontSize: "2rem" }} />{" "}
+        {/* Hace que el icono sea más grande */}
+      </IconButton>
+
+      {/* Header */}
+      <Header />
+
+      {/* Dashboard Card */}
+      <Box
+        className="flex items-center justify-start bg-gray-100 mt-12"
+        sx={{
+          display: "flex", // Usar flexbox
+          flexDirection: "column", // Colocar los elementos en columna
+          alignItems: "center", // Centrado horizontal
+          justifyContent: "flex-start", // Mover el contenido hacia arriba
+          height: "calc(100vh - 64px)", // Ajustamos la altura a 100vh menos la altura del Header (64px)
+          overflow: "hidden", // Evitar scroll
+          padding: 2, // Espaciado alrededor
+        }}
+      >
+        <DashboardCard onLogout={handleLogout} />
+      </Box>
+
+      {/* Sidebar */}
+      <Sidebar open={openSidebar} onClose={toggleSidebar} />
+    </Box>
   );
 };
 

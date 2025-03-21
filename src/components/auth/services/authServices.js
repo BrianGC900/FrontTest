@@ -17,10 +17,15 @@ export const setupPassword = async (data) => {
   return response.data;
 };
 
-// Cambiar el nombre de la función a `verifyTwoFactor`
-export const verifyTwoFactor = async (token, userId) => {
-  const response = await api.post(`${baseUrl}/verify2fa/${userId}`, {
-    token,
-  });
-  return response.data;
+export const verifyTwoFactor = async (email, code) => {
+  try {
+    console.log("Enviando datos al backend:", { email, code });
+    const response = await api.post(`${baseUrl}/verify-2fa`,{ email, code }, {
+      headers: { "Content-Type": "application/json" }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error en la verificación 2FA:", error.response?.data || error.message);
+    throw error;
+  }
 };
