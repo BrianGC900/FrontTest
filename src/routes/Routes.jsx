@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import AuthView from "../components/auth/screens/authView";
 import DashboardPage from "../pages/DashboardPage";
 import UsersScreen from "../components/user/screens/UserScreen";
-import Footer from "../layout/Footer";  // Importa el Footer
+import Footer from "../layout/Footer"; 
 
 const isAuthenticated = () => {
   return !!localStorage.getItem("authToken");
@@ -15,8 +15,6 @@ const ProtectedRoute = ({ children }) => {
 
 const RoutesConfig = () => {
   const location = useLocation();
-
-  // Verificar si la ruta actual no es '/login' para mostrar el footer
   const showFooter = location.pathname !== "/login";
 
   return (
@@ -41,8 +39,6 @@ const RoutesConfig = () => {
         />
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
-
-      {/* Mostrar el footer solo en rutas protegidas (Dashboard y Users) */}
       {showFooter && <Footer />}
     </div>
   );
